@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://enormativ.ru/sitemap.xml

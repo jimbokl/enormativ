@@ -1,0 +1,23 @@
+.DS_Store
+.env
+.env.*
+!.env.example
+node_modules/
+dist/
+target/
+*.log
+.codegraph/
+.design-harness/
+
+# This repository may be published for GitHub Pages. Keep research and source material local.
+/data/
+/research/
+/src/
+/assets/
+
+# Product strategy and local operating notes stay outside the public Pages repository.
+/AGENTS.md
+/PLATFORM.md
+/STATUS.md
+/backlog.md
+/web/DESIGN.md
