@@ -6,6 +6,7 @@ import {
   ScanSearch, ShieldCheck, Sparkles, UploadCloud, X,
 } from 'lucide-react'
 import { createExampleFile } from './lib/example.js'
+import { csvCell } from './lib/csv.js'
 import { MAX_FILE_BYTES, openWorkbook, previewWorksheet, sha256, worksheetColumns } from './lib/workbook.js'
 import { compareSourceInventories } from './modules/ecology/comparison.js'
 import { EMISSION_FIELDS, SOURCE_FIELDS, suggestMapping, validateWorkbook } from './modules/ecology/validation.js'
@@ -38,10 +39,6 @@ function downloadBlob(filename, content, type) {
   anchor.click()
   anchor.remove()
   window.setTimeout(() => URL.revokeObjectURL(url), 1000)
-}
-
-function csvCell(value) {
-  return `"${String(value ?? '').replaceAll('"', '""')}"`
 }
 
 function issueCsv(result) {
@@ -186,7 +183,8 @@ function ToolPage({ mode }) {
       if (!/\.xlsx$/i.test(file.name)) throw new Error('Поддерживается только формат .xlsx. Файлы .xls и PDF пока не проверяются.')
       if (file.size > MAX_FILE_BYTES) throw new Error('Файл больше 20 МБ. Для первой версии выберите меньшую книгу.')
       const bytes = await file.arrayBuffer()
-      const [opened, hash] = await Promise.all([openWorkbook(bytes), sha256(bytes)])
+      const hash = await sha256(bytes)
+      const opened = await openWorkbook(bytes)
       setParsed(opened)
       setFileInfo({ name: file.name, size: file.size, hash })
       setConfig(initialConfig(opened.workbook, opened.sheets))
@@ -204,7 +202,8 @@ function ToolPage({ mode }) {
       if (!/\.xlsx$/i.test(file.name)) throw new Error('Второй файл должен быть в формате .xlsx.')
       if (file.size > MAX_FILE_BYTES) throw new Error('Второй файл больше 20 МБ.')
       const bytes = await file.arrayBuffer()
-      const [opened, hash] = await Promise.all([openWorkbook(bytes), sha256(bytes)])
+      const hash = await sha256(bytes)
+      const opened = await openWorkbook(bytes)
       setComparisonParsed(opened)
       setComparisonFile({ name: file.name, size: file.size, hash })
       setComparisonConfig(initialConfig(opened.workbook, opened.sheets).sources)
