@@ -93,7 +93,7 @@ export async function openWorkbook(bytes) {
 
 export async function sha256(bytes) {
   const subtle = globalThis.crypto?.subtle
-  if (!subtle) throw new Error('Для обработки файла нужен HTTPS. Откройте https://enormativ.ru/ в современном браузере и повторите попытку.')
+  if (!subtle) throw new Error('Для обработки файла требуется HTTPS. На этом адресе защищённое соединение пока недоступно; повторите попытку позже.')
   const digest = await subtle.digest('SHA-256', bytes)
   return Array.from(new Uint8Array(digest), value => value.toString(16).padStart(2, '0')).join('')
 }
