@@ -97,7 +97,7 @@ function ToolGuide({ mode }) {
       </>}
     </div>
     <div className="tool-guide-notes"><div><h3>Какие файлы подходят?</h3><p>XLSX до 20 МБ и экспериментальный импорт CSV/TSV в UTF-8 или Windows-1251. CSV/TSV содержит одну таблицу; разделитель определяется автоматически. До 10 000 строк и 100 колонок. Перед проверкой подтвердите строку заголовков и колонки. Импорт CSV/TSV пока не проверен на рабочих экологических выгрузках.</p></div><div><h3>Проверяет ли сервис соблюдение закона?</h3><p>Нет. Это структурная проверка данных; нормативные лимиты, расчёт выбросов и юридическое заключение в текущую версию не входят.</p></div></div>
-    <p className="tool-guide-related">{isCompare ? <>Нужно проверить один файл? <a href="../check/">Откройте проверку таблицы</a>.</> : <>Есть две версии инвентаризации? <a href="../compare/">Сравните таблицы</a>.</>}</p>
+    <p className="tool-guide-related">{isCompare ? <>Нужно проверить один файл? <a href="../check/">Откройте проверку таблицы</a>.</> : <>Нужен пример колонок? <a href="../../examples/source-inventory/">Скачайте учебную таблицу источников</a>. Есть две версии инвентаризации? <a href="../compare/">Сравните таблицы</a>.</>}</p>
   </div></section>
 }
 
@@ -337,6 +337,7 @@ function PortalPage() {
       </div></section>
       <section className="portal-tools" id="catalog"><div className="container"><div className="portal-section-heading"><div><span className="eyebrow">01 / Каталог проверок</span><h2>Выберите направление.</h2></div><p>{canProcessFiles === false ? 'Первый модуль для экологов готов, но на этом адресе обработка файлов ожидает HTTPS.' : 'Первый модуль для экологов проверяет структуру XLSX и экспериментально принимает CSV/TSV в браузере.'} Другие направления обозначают план развития каталога; готовых нормативных пакетов для них пока нет.</p></div>
         <div className="catalog-feature"><div className="catalog-feature-main"><div className="catalog-feature-top"><span className="catalog-index">01 / Экология</span><span className="catalog-status"><span /> {canProcessFiles === true ? 'Доступно сейчас' : canProcessFiles === false ? 'Ожидаем HTTPS' : 'Проверяем доступность'}</span></div><div><span className="catalog-type">Структурная проверка · ранняя версия</span><h3>Инвентаризация источников выбросов</h3><p>Проверьте пропуски, повторяющиеся номера, связи и числовые поля в XLSX или CSV/TSV (экспериментально). Результат привязан к исходной ячейке; это ещё не проверка соответствия закону.</p></div><div className="catalog-feature-actions"><a href="./tools/check/">Проверить файл <ArrowRight size={17}/></a><a href="./tools/compare/">Сравнить два файла <ArrowRight size={17}/></a></div></div><div className="catalog-feature-side" aria-hidden="true"><div className="catalog-sheet"><span>ВХОДЯЩИЕ ДАННЫЕ / XLSX + CSV/TSV</span><div className="catalog-sheet-rows"><i/><i/><i/><i/></div><div className="catalog-sheet-pin">A12</div></div><div className="catalog-result"><ScanSearch size={22}/><span>Правило → ячейка → замечание</span></div></div></div>
+        <p className="catalog-example-link">Нужна таблица для начала? <a href="./examples/source-inventory/">Скачайте учебный CSV-образец источников выбросов</a>.</p>
         <div className="catalog-coming"><div><span className="eyebrow">Следующие направления</span><h3>Каталог будет расти по отраслям.</h3></div><ul>{plannedSectors.map((sector, index) => <li key={sector}><span className="sector-index">0{index + 2}</span><span>{sector}</span><small>В планах</small></li>)}</ul></div>
       </div></section>
       <section className="portal-method" id="method"><div className="container"><div className="portal-section-heading"><div><span className="eyebrow">02 / Принцип платформы</span><h2>У каждой проверки будет паспорт.</h2></div><p>Для будущих нормативных пакетов мы закладываем проверяемую цепочку от источника требования до конкретного замечания в данных.</p></div><div className="method-steps"><article><span>01</span><h3>Основание</h3><p>Документ, редакция, область и дата применимости правила.</p></article><article><span>02</span><h3>Входные данные</h3><p>Требуемые колонки и понятное сопоставление с таблицей.</p></article><article><span>03</span><h3>Проверка</h3><p>Версия правила и результат для каждой подходящей строки.</p></article><article><span>04</span><h3>След в отчёте</h3><p>Файл, лист, ячейка, причина замечания и экспорт результата.</p></article></div><div className="method-current"><strong>Что есть сейчас</strong><p>Экологический модуль выполняет структурные правила локально в браузере. Он показывает адреса ячеек и экспортирует CSV/JSON. Нормативные пакеты появятся после проверки источников и правил экспертами.</p></div></div></section>
@@ -345,8 +346,36 @@ function PortalPage() {
   </>
 }
 
+function SourceInventoryExamplePage() {
+  const columns = [
+    ['Номер источника', 'Идентификатор записи. По нему сервис находит пропуски и повторы.'],
+    ['Наименование', 'Подпись для чтения таблицы; в структурной проверке необязательна.'],
+    ['Широта и долгота', 'Числовая пара для указанной географической системы координат. Для другой системы используйте X и Y и укажите её название.'],
+    ['Система координат', 'Контекст для чисел. Диапазон широты и долготы проверяется только при распознанной WGS84.'],
+  ]
+  return <>
+    <SiteHeader root="../../" />
+    <main>
+      <section className="example-hero"><div className="container example-hero-inner"><div>
+        <a className="breadcrumb" href="../../#catalog">← Каталог проверок</a>
+        <span className="eyebrow">Экология / Учебный образец</span>
+        <h1>Образец таблицы источников выбросов для проверки</h1>
+        <p>Скачайте CSV с двумя вымышленными источниками, посмотрите устройство колонок и замените учебные значения своими. После этого можно проверить структуру файла в браузере.</p>
+        <div className="example-actions"><a className="button button-primary" href="../../downloads/source-inventory-example.csv" download="source-inventory-example.csv"><Download size={18} /> Скачать учебный CSV</a><a className="button button-outline" href="../../tools/check/">Открыть проверку <ArrowRight size={18} /></a></div>
+        <p className="example-scope">Это пример структуры данных для инструмента еНорматив, а не утверждённая форма инвентаризации или нормативный образец.</p>
+      </div><aside className="example-card" aria-label="Что внутри файла"><FileSpreadsheet size={30}/><strong>5 колонок<br/>2 учебные строки</strong><span>UTF-8 · разделитель «;» · вымышленные значения</span></aside></div></section>
+      <section className="example-section section"><div className="container"><span className="eyebrow">Содержимое образца</span><h2>Колонки, которые можно сопоставить</h2><p className="example-lead">При загрузке сервис предложит соответствие колонок. Проверьте его вручную: заголовки в ваших рабочих файлах могут называться иначе.</p><div className="example-columns">{columns.map(([name, description]) => <article key={name}><h3>{name}</h3><p>{description}</p></article>)}</div><div className="example-table-wrap"><table><caption>Учебные значения из файла CSV</caption><thead><tr><th>Номер источника</th><th>Наименование</th><th>Широта</th><th>Долгота</th><th>Система координат</th></tr></thead><tbody><tr><td>ИЗА-001</td><td>Учебная труба</td><td>55,75</td><td>37,62</td><td>WGS84</td></tr><tr><td>ИЗА-002</td><td>Учебная вентиляция</td><td>55,76</td><td>37,64</td><td>WGS84</td></tr></tbody></table></div></div></section>
+      <section className="example-section example-how section"><div className="container"><span className="eyebrow">От файла к замечанию</span><h2>Как использовать образец</h2><ol className="example-steps"><li><strong>Скачайте CSV.</strong><span>Откройте его в табличном редакторе. Удалите учебные строки и внесите свои данные, сохранив заголовки или заменив их на привычные.</span></li><li><strong>Сохраните CSV или XLSX.</strong><span>Если сохраняете CSV, проверьте разделитель, кодировку и значения с ведущими нулями. В одном CSV находится одна таблица.</span></li><li><strong>Откройте проверку.</strong><span>Загрузите файл, подтвердите строку заголовков и сопоставьте номер источника, координаты и систему координат.</span></li><li><strong>Разберите замечания.</strong><span>Сервис отмечает пустые и повторяющиеся номера, неполные координаты и некоторые ошибки значений. Отчёт можно скачать в CSV и JSON.</span></li></ol><a className="button button-primary" href="../../tools/check/">Проверить свою таблицу <ArrowRight size={18}/></a></div></section>
+      <section className="example-section section"><div className="container example-limits"><div><span className="eyebrow">Границы проверки</span><h2>Что означает результат</h2></div><div><p>Замечание указывает на конкретную строку и значение, которое стоит пересмотреть. Отсутствие замечаний означает только то, что текущие структурные правила не нашли проблем в сопоставленных колонках.</p><p>Сервис не устанавливает соблюдение закона, не пересчитывает выбросы и не заменяет проверку документа экологом. CSV/TSV пока испытаны на тестовых и открытых непрофильных таблицах.</p><p>Если нужно сравнить две версии файла, используйте <a href="../../tools/compare/">сверку таблиц источников</a>.</p></div></div></section>
+    </main>
+    <SiteFooter root="../../" />
+  </>
+}
+
 export function App({ page }) {
-  return page === 'check' || page === 'compare' ? <ToolPage mode={page} /> : <PortalPage />
+  if (page === 'check' || page === 'compare') return <ToolPage mode={page} />
+  if (page === 'sources-example') return <SourceInventoryExamplePage />
+  return <PortalPage />
 }
 
 if (typeof document !== 'undefined') {

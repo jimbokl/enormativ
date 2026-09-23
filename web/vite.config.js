@@ -12,6 +12,7 @@ export default defineConfig({
         portal: fileURLToPath(new URL('./index.html', import.meta.url)),
         check: fileURLToPath(new URL('./tools/check/index.html', import.meta.url)),
         compare: fileURLToPath(new URL('./tools/compare/index.html', import.meta.url)),
+        sourcesExample: fileURLToPath(new URL('./examples/source-inventory/index.html', import.meta.url)),
       },
     },
   },

@@ -1,5 +1,6 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
+import { readFile } from 'node:fs/promises'
 import ExcelJS from 'exceljs'
 import { openDelimitedTable, parseDelimited } from '../src/lib/delimited.js'
 import { openWorkbook, sourceCell, worksheetColumns } from '../src/lib/workbook.js'
@@ -7,6 +8,17 @@ import { SOURCE_FIELDS, suggestMapping, validateWorkbook } from '../src/modules/
 import { compareSourceInventories } from '../src/modules/ecology/comparison.js'
 
 const utf8 = value => new TextEncoder().encode(value)
+
+test('downloadable source inventory sample opens in the published checker', async () => {
+  const bytes = await readFile(new URL('../public/downloads/source-inventory-example.csv', import.meta.url))
+  const opened = await openDelimitedTable(bytes, 'source-inventory-example.csv')
+  const sheet = opened.workbook.getWorksheet('Таблица')
+  const mapping = suggestMapping(worksheetColumns(sheet, 1), SOURCE_FIELDS)
+  assert.deepEqual(mapping, { id: 1, name: 2, x: 3, y: 4, coordinateSystem: 5 })
+  const result = validateWorkbook(opened.workbook, { sources: { sheet: 'Таблица', headerRow: 1, mapping } }, 'sample')
+  assert.equal(result.summary.sources, 2)
+  assert.equal(result.issues.length, 0)
+})
 
 test('CSV quotes, escaped quotes, CRLF and decimal commas preserve record and source line', async () => {
   const text = '\uFEFFНомер источника;Наименование;Широта;Долгота;Система координат\r\n' +

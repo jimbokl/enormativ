@@ -19,6 +19,7 @@ try {
     { page: 'portal', file: 'index.html' },
     { page: 'check', file: 'tools/check/index.html' },
     { page: 'compare', file: 'tools/compare/index.html' },
+    { page: 'sources-example', file: 'examples/source-inventory/index.html' },
   ]
   const titles = new Set()
   for (const { page, file } of pages) {
