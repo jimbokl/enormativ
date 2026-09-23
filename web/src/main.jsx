@@ -67,11 +67,11 @@ function Brand({ root = './' }) {
 }
 
 function SiteHeader({ root = './', active = '' }) {
-  return <header className="site-header" id="top"><div className="container header-inner"><Brand root={root} /><nav aria-label="Основная навигация"><a href={`${root}tools/check/`} aria-current={active === 'check' ? 'page' : undefined}>Проверить XLSX</a><a href={`${root}tools/compare/`} aria-current={active === 'compare' ? 'page' : undefined}>Сравнить файлы</a></nav><a className="header-action" href={active ? root : `${root}tools/check/`}>{active ? 'Все инструменты' : 'Начать проверку'} <ArrowRight size={16} /></a></div></header>
+  return <header className="site-header" id="top"><div className="container header-inner"><Brand root={root} /><nav aria-label="Основная навигация"><a href={`${root}#catalog`}>Каталог</a><a href={`${root}tools/check/`} aria-current={active === 'check' ? 'page' : undefined}>Проверить XLSX</a><a href={`${root}tools/compare/`} aria-current={active === 'compare' ? 'page' : undefined}>Сравнить файлы</a></nav><a className="header-action" href={active ? `${root}#catalog` : `${root}tools/check/`}>{active ? 'К каталогу' : 'Открыть проверку'} <ArrowRight size={16} /></a></div></header>
 }
 
 function SiteFooter({ root = './' }) {
-  return <footer className="site-footer"><div className="container footer-inner"><Brand root={root} /><p>еНорматив · локальные проверки профессиональных данных</p><a href={root}>Все инструменты ↑</a></div></footer>
+  return <footer className="site-footer"><div className="container footer-inner"><Brand root={root} /><p>Каталог цифровых проверок · первый модуль: экология</p><a href={`${root}#top`}>Наверх ↑</a></div></footer>
 }
 
 function FieldSelector({ field, columns, value, onChange }) {
@@ -271,9 +271,10 @@ function ToolPage({ mode }) {
     <SiteHeader root="../../" active={mode} />
     <main>
       <section className="tool-intro"><div className="container tool-intro-inner">
-        <div><a className="breadcrumb" href="../../">← Все инструменты</a><span className="eyebrow">Экология / {isCompare ? 'Сопоставление' : 'Структурная проверка'}</span>
+        <div><a className="breadcrumb" href="../../#catalog">← Каталог проверок</a><span className="eyebrow">Каталог / Экология / {isCompare ? 'Сопоставление' : 'Структурная проверка'}</span>
           <h1>{isCompare ? 'Сравните два файла источников.' : 'Проверьте таблицу до сдачи.'}</h1>
           <p>{isCompare ? 'Найдите расхождения номеров и координат между двумя XLSX. Сначала подтвердите, что данные относятся к одному объекту и сопоставимому состоянию.' : 'Откройте XLSX-инвентаризацию, укажите колонки и получите замечания с адресами ячеек. Проверка выполняется локально в браузере.'}</p>
+          <p className="tool-scope-note">Доступный модуль проверяет структуру данных. Соответствие действующим нормативам он пока не устанавливает.</p>
         </div>
         <div className="tool-facts"><div><LockKeyhole size={19}/><span>Файлы остаются в браузере</span></div><div><MapPin size={19}/><span>Замечания с адресом ячейки</span></div><div><FileText size={19}/><span>Отчёт CSV и JSON</span></div></div>
       </div></section>
@@ -297,20 +298,20 @@ function ToolPage({ mode }) {
 }
 
 function PortalPage() {
+  const canProcessFiles = Boolean(globalThis.crypto?.subtle)
+  const plannedSectors = ['Охрана труда', 'Бухгалтерия и кадры', 'Логистика', 'Строительство', 'Медицина']
   return <>
     <SiteHeader />
     <main>
       <section className="portal-hero"><div className="container portal-hero-grid">
-        <div className="portal-lead"><span className="eyebrow"><span className="eyebrow-dot"></span> Цифровые инструменты для экологов</span><h1>От файла — <em>к проверяемому замечанию.</em></h1><p>еНорматив помогает заметить ошибки в рабочих таблицах и увидеть, где именно они возникли. Первый модуль работает с данными инвентаризации источников выбросов.</p><div className="portal-actions"><a className="button button-primary" href="./tools/check/">Проверить XLSX <ArrowRight size={18}/></a><a className="portal-sub-link" href="#tools">Выбрать инструмент <ArrowDownRight size={17}/></a></div><div className="portal-proof"><span><LockKeyhole size={15}/> Локально в браузере</span><span><Fingerprint size={15}/> След до исходной ячейки</span></div></div>
-        <div className="portal-visual"><img src="./hero-ecology.png" alt="Иллюстрация промышленной площадки с источниками выбросов" /><div className="visual-caption"><span>01 / ЭКОЛОГИЯ</span><strong>Рабочие данные<br/>под контролем</strong><small>XLSX → правило → замечание</small></div></div>
+        <div className="portal-lead"><span className="eyebrow"><span className="eyebrow-dot"></span> Каталог цифровых проверок</span><h1>От документа — <em>к проверке данных.</em></h1><p>еНорматив превращает требования и рабочие правила в понятные проверки таблиц. Начинаем с экологии: первый модуль проверяет структуру XLSX и показывает замечание вплоть до ячейки.</p><div className="portal-actions"><a className="button button-primary" href="./tools/check/">Открыть первую проверку <ArrowRight size={18}/></a><a className="portal-sub-link" href="#catalog">Смотреть каталог <ArrowDownRight size={17}/></a></div><div className="portal-proof"><span><LockKeyhole size={15}/> Обработка в браузере</span><span><Fingerprint size={15}/> Замечание с адресом ячейки</span></div></div>
+        <div className="portal-visual"><img src="./hero-standards.webp" alt="Абстрактная библиотека документов и таблиц, связанных линией проверки" /><div className="visual-caption"><span>ЕНОРМАТИВ / 001</span><strong>Основание.<br/>Данные. Результат.</strong></div></div>
       </div></section>
-      <section className="portal-tools" id="tools"><div className="container"><div className="portal-section-heading"><div><span className="eyebrow">Инструменты / 01—02</span><h2>Начните с вашей задачи.</h2></div><p>Оба инструмента работают с файлами на вашем устройстве. Они показывают основание проверки и сохраняют результат для дальнейшей работы.</p></div>
-        <div className="portal-card-grid">
-          <a className="portal-card portal-card-primary" href="./tools/check/"><div className="portal-card-top"><span>01 / Один файл</span><ScanSearch size={30}/></div><div><h3>Проверить<br/>XLSX</h3><p>Найдите пропуски, дубли номеров, ошибки связей и числовых полей в книге инвентаризации.</p></div><div className="portal-card-bottom"><span>.xlsx · до 20 МБ</span><strong>Открыть инструмент <ArrowRight size={18}/></strong></div></a>
-          <a className="portal-card portal-card-secondary" href="./tools/compare/"><div className="portal-card-top"><span>02 / Два файла</span><FileSpreadsheet size={30}/></div><div><h3>Сравнить<br/>источники</h3><p>Сопоставьте номера и координаты двух XLSX, чтобы увидеть расхождения и требующие проверки случаи.</p></div><div className="portal-card-bottom"><span>Общий объект · подтверждённая область</span><strong>Открыть инструмент <ArrowRight size={18}/></strong></div></a>
-        </div>
+      <section className="portal-tools" id="catalog"><div className="container"><div className="portal-section-heading"><div><span className="eyebrow">01 / Каталог проверок</span><h2>Выберите направление.</h2></div><p>{canProcessFiles ? 'Сейчас доступен первый модуль для экологов.' : 'Первый модуль для экологов готов, но на этом адресе обработка файлов ожидает HTTPS.'} Другие направления обозначают план развития каталога; готовых нормативных пакетов для них пока нет.</p></div>
+        <div className="catalog-feature"><div className="catalog-feature-main"><div className="catalog-feature-top"><span className="catalog-index">01 / Экология</span><span className="catalog-status"><span /> {canProcessFiles ? 'Доступно сейчас' : 'Ожидаем HTTPS'}</span></div><div><span className="catalog-type">Структурная проверка · ранняя версия</span><h3>Инвентаризация источников выбросов</h3><p>Проверьте пропуски, повторяющиеся номера, связи и числовые поля в XLSX. Результат привязан к исходной ячейке; это ещё не проверка соответствия закону.</p></div><div className="catalog-feature-actions"><a href="./tools/check/">Проверить файл <ArrowRight size={17}/></a><a href="./tools/compare/">Сравнить два файла <ArrowRight size={17}/></a></div></div><div className="catalog-feature-side" aria-hidden="true"><div className="catalog-sheet"><span>ВХОДЯЩИЕ ДАННЫЕ / XLSX</span><div className="catalog-sheet-rows"><i/><i/><i/><i/></div><div className="catalog-sheet-pin">A12</div></div><div className="catalog-result"><ScanSearch size={22}/><span>Правило → ячейка → замечание</span></div></div></div>
+        <div className="catalog-coming"><div><span className="eyebrow">Следующие направления</span><h3>Каталог будет расти по отраслям.</h3></div><ul>{plannedSectors.map((sector, index) => <li key={sector}><span className="sector-index">0{index + 2}</span><span>{sector}</span><small>В планах</small></li>)}</ul></div>
       </div></section>
-      <section className="portal-method"><div className="container portal-method-grid"><div><span className="eyebrow">Подход</span><h2>Понятно, что проверено.<br/>Видно, что требует решения.</h2></div><div><p>Каждое замечание связано с файлом, листом, ячейкой и версией структурного правила. Отчёт можно выгрузить в CSV или JSON.</p><p>Сервис не выдаёт нормативное заключение: профессиональная оценка и работа с актуальной редакцией требований остаются за специалистом.</p></div></div></section>
+      <section className="portal-method" id="method"><div className="container"><div className="portal-section-heading"><div><span className="eyebrow">02 / Принцип платформы</span><h2>У каждой проверки будет паспорт.</h2></div><p>Для будущих нормативных пакетов мы закладываем проверяемую цепочку от источника требования до конкретного замечания в данных.</p></div><div className="method-steps"><article><span>01</span><h3>Основание</h3><p>Документ, редакция, область и дата применимости правила.</p></article><article><span>02</span><h3>Входные данные</h3><p>Требуемые колонки и понятное сопоставление с таблицей.</p></article><article><span>03</span><h3>Проверка</h3><p>Версия правила и результат для каждой подходящей строки.</p></article><article><span>04</span><h3>След в отчёте</h3><p>Файл, лист, ячейка, причина замечания и экспорт результата.</p></article></div><div className="method-current"><strong>Что есть сейчас</strong><p>Экологический модуль выполняет структурные правила локально в браузере. Он показывает адреса ячеек и экспортирует CSV/JSON. Нормативные пакеты появятся после проверки источников и правил экспертами.</p></div></div></section>
     </main>
     <SiteFooter />
   </>
