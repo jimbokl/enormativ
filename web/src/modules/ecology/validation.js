@@ -65,7 +65,7 @@ function issue(code, severity, cell, message, action, entity = '') {
     ruleVersion: RULESET_VERSION,
     severity,
     entity,
-    location: cell ? { sheet: cell.sheet, cell: cell.address, row: Number(cell.address.match(/\d+$/)?.[0] ?? 0) } : null,
+    location: cell ? { sheet: cell.sheet, cell: cell.address, row: Number(cell.address.match(/\d+$/)?.[0] ?? 0), sourceLine: cell.sourceLine ?? null } : null,
     observed: cell?.text ?? '',
     mergedFrom: cell?.master ?? null,
     message,

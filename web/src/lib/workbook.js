@@ -32,6 +32,7 @@ export function sourceCell(worksheet, rowNumber, columnNumber) {
   return {
     sheet: worksheet.name,
     address: cell.address,
+    sourceLine: worksheet.sourceLines?.get(rowNumber) ?? null,
     master,
     ...parsed,
   }

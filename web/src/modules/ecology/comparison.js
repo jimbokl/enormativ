@@ -10,6 +10,7 @@ function evidence(record, file) {
     sheet: record.sheet,
     cell: cell.address,
     row: record.row,
+    sourceLine: cell.sourceLine ?? null,
     observed: cell.text,
   } : null
 }
@@ -23,6 +24,7 @@ function coordinateEvidence(record, file) {
     cell: cell.address,
     cells: [record.fields.x?.address, record.fields.y?.address].filter(Boolean),
     row: record.row,
+    sourceLine: cell.sourceLine ?? null,
     observed: [record.fields.x?.text, record.fields.y?.text].filter(Boolean).join(' / '),
   }
 }
@@ -69,7 +71,7 @@ function coordinateState(record) {
 export function compareSourceInventories(primary, secondary, { primaryFile, secondaryFile, scopeConfirmed }) {
   if (!scopeConfirmed) throw new Error('Подтвердите, что файлы относятся к одному объекту и сопоставимому состоянию.')
   if (!primaryFile?.hash || !secondaryFile?.hash) throw new Error('Для обоих файлов нужен SHA-256.')
-  if (primaryFile.hash === secondaryFile.hash) throw new Error('Выбраны одинаковые файлы. Для сверки нужны два разных XLSX.')
+  if (primaryFile.hash === secondaryFile.hash) throw new Error('Выбраны одинаковые файлы. Для сверки нужны два разных файла.')
 
   const left = indexSources(primary.sources)
   const right = indexSources(secondary.sources)
